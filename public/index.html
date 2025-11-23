@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SmartShop – E-Commerce Product Lookup</title>
+    <meta
+      name="description"
+      content="SmartShop helps you compare products, prices, and ratings from online stores in one beautiful interface."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Font -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-theme="light">
+    <div class="page">
+      <!-- Top bar -->
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">🛒</div>
+          <div>
+            <h1 class="brand-title">SmartShop</h1>
+            <p class="brand-subtitle">
+              Compare products, prices & ratings from online stores in one place.
+            </p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="theme-toggle" class="btn-icon" type="button">
+            <span class="theme-icon-light">☀️</span>
+            <span class="theme-icon-dark">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-left">
+          <p class="hero-pill">Live data • API-powered • Deployed with load balancing</p>
+          <h2 class="hero-heading">
+            Smarter shopping decisions,<br />
+            <span>without opening 20 tabs.</span>
+          </h2>
+          <p class="hero-text">
+            Search for any product, filter by price & rating, and quickly compare options
+            side-by-side to find the best value for your budget.
+          </p>
+          <ul class="hero-list">
+            <li>Real product data: price, rating, store link.</li>
+            <li>Sort & filter to match your priorities.</li>
+            <li>Compare up to three products in one view.</li>
+          </ul>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-card">
+            <p class="hero-card-label">Why SmartShop?</p>
+            <p class="hero-card-text">
+              A focused research tool for online shopping. No ads, no noise — just clean,
+              comparable information to help you pick what’s best for you.
+            </p>
+            <div class="hero-metrics">
+              <div>
+                <span class="metric-label">Compare</span>
+                <span class="metric-value">3x</span>
+              </div>
+              <div>
+                <span class="metric-label">Filters</span>
+                <span class="metric-value">Price · Rating</span>
+              </div>
+              <div>
+                <span class="metric-label">API</span>
+                <span class="metric-value">Real-time</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main -->
+      <main class="main">
+        <!-- Search / Filters -->
+        <section class="search-card">
+          <form id="search-form">
+            <div class="search-bar-row">
+              <div class="field-group field-search">
+                <label for="query">What are you looking for?</label>
+                <div class="search-input-wrapper">
+                  <span class="icon">🔍</span>
+                  <input
+                    type="text"
+                    id="query"
+                    placeholder="e.g. wireless headphones, gaming mouse, iPhone 13"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">
+                Search
+              </button>
+            </div>
+
+            <div class="filters-row">
+              <div class="field-group">
+                <label for="min-price">Min price</label>
+                <input
+                  type="number"
+                  id="min-price"
+                  min="0"
+                  step="0.01"
+                  placeholder="0"
+                />
+              </div>
+
+              <div class="field-group">
+                <label for="max-price">Max price</label>
+                <input
+                  type="number"
+                  id="max-price"
+                  min="0"
+                  step="0.01"
+                  placeholder="500"
+                />
+              </div>
+
+              <div class="field-group">
+                <label for="min-rating">Min rating</label>
+                <select id="min-rating">
+                  <option value="">Any</option>
+                  <option value="1">1★+</option>
+                  <option value="2">2★+</option>
+                  <option value="3">3★+</option>
+                  <option value="4">4★+</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="sort">Sort by</label>
+                <select id="sort">
+                  <option value="">Best match</option>
+                  <option value="price-asc">Price ↑</option>
+                  <option value="price-desc">Price ↓</option>
+                  <option value="rating-desc">Rating ↑</option>
+                  <option value="rating-asc">Rating ↓</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="status-message" class="status-message"></div>
+          </form>
+        </section>
+
+        <!-- Results -->
+        <section class="results-section">
+          <div class="results-header">
+            <div>
+              <h3>Results</h3>
+              <p class="results-subtitle">
+                Products will appear here after your search.
+              </p>
+            </div>
+            <div class="results-header-right">
+              <div class="results-meta">
+                <span id="results-count"></span>
+                <span id="server-label" class="server-label"></span>
+              </div>
+              <div class="results-actions">
+                <button id="compare-btn" class="btn-secondary" type="button">
+                  Compare (<span id="compare-count">0</span>)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading skeleton -->
+          <div id="loading-skeleton" class="results-grid skeleton-grid hidden">
+            <div class="product-card skeleton-card"></div>
+            <div class="product-card skeleton-card"></div>
+            <div class="product-card skeleton-card"></div>
+            <div class="product-card skeleton-card"></div>
+            <div class="product-card skeleton-card"></div>
+            <div class="product-card skeleton-card"></div>
+          </div>
+
+          <!-- Actual results -->
+          <div id="results" class="results-grid"></div>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <button id="prev-page" class="btn-secondary" type="button">
+              ← Prev
+            </button>
+            <span id="page-info" class="page-info">Page 1</span>
+            <button id="next-page" class="btn-secondary" type="button">
+              Next →
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          SmartShop uses an external e-commerce API. Prices, ratings, and
+          availability may change at any time. This application is for
+          educational use only.
+        </p>
+      </footer>
+    </div>
+
+    <!-- Comparison Modal -->
+    <div id="compare-modal" class="modal hidden">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Compare products</h3>
+          <button id="close-compare" class="btn-icon" type="button">✕</button>
+        </div>
+        <div id="compare-body" class="compare-body">
+          <!-- comparison table injected here -->
+        </div>
+        <div class="modal-footer">
+          <button id="clear-compare" class="btn-secondary" type="button">
+            Clear selection
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

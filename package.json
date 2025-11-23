@@ -1,0 +1,20 @@
+{
+  "name": "ecommerce-lookup",
+  "version": "1.0.0",
+  "description": "SmartShop - E-commerce product lookup app using an external API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "dotenv": "^16.4.0",
+    "express": "^4.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
